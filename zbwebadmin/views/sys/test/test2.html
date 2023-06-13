@@ -1,0 +1,192 @@
+<div class="layui-fluid" lay-title="测试2" tname="jczl_bmzd" tfield="bmbhid" mcfield="bmbh" proc="test_getbmzd">
+  <button lay-active-test2="tablesx" style="display: none;">刷新</button>
+  <div class="layui-card">
+    <div class="layui-card-body nepadmin-table-full">
+      <table id="jczl_bmzd" lay-filter="jczl_bmzd"></table>
+    </div>
+
+  </div>
+</div>
+<style>
+
+</style>
+
+<script>
+  layui.use(['admin', 'table', 'form', 'conf', 'jquery'], function (admin, table, form, conf, $) {
+    var menumc = admin.getTitle();
+     var tjson = admin.getTnamefield('.layui-fluid');
+     var tableurl = '/jczl/getAllDataProc1';
+
+     var postdata = { tname: 'jczl_bmzd', tfield: 'bmbhid', mcfield: 'bmbh' }
+
+    var postdataTable = JSON.parse(JSON.stringify(postdata))
+    var postdataEdit = JSON.parse(JSON.stringify(postdata))
+
+    var cols = [
+      { type: 'radio' },
+      { title: 'bmbh', field: 'bmbh', width: 100, sort: true, totalRowText: '合计:' },
+      { title: '部门名称', field: 'bmbhmc', width: 150, mcfield: true },
+      //{ title: '', field: 'bmmc', width: 150 },
+      { title: 'lx', field: 'lx', width: 120 },
+      { title: '供应商编号', field: 'gysbh', width: 180, mcfield: false },
+      { title: '专柜编号', field: 'zgbh', width: 180 },
+      { title: 'rq-date', field: 'rq1', width: 180 },
+      { title: 'rq-datetime', field: 'rq2', width: 180 },
+      { title: 'bmbhid', field: 'bmbhid', width: 120, totalRow: true, pkey: true },
+      // { title: '用户昵称', field: 'zxj', width: 120 },
+      // { title: '所属用户组', field: 'jysl', width: 120 },
+      // { title: '启用标记', field: 'qybj', width: 80 },
+      // { title: 'yhbhid', field: 'yhbhid', width: 80, hide: true },
+    ]
+    var tableid_test2 = 'jczl_bmzd';
+    var pd = {}
+    var arr = admin.getcols(cols)
+    pd.tcols = arr.colstr
+    pd.mcfield = arr.mcstr
+    pd.tfield = arr.pkeystr
+    pd.tname = tableid_test2
+    admin.table({
+      elem: tableid_test2,
+      //url: tableurl,
+      api: 'getAllData',
+      where: pd,
+      //height: 'full-170',
+      // totalRow: true,
+      cols: [cols]
+      , done: function (res) {
+        //console.log(res)
+        // admin.post({
+        //   url: '/jczl/getAllDataTableProc', data: { proc: 'test_getbmzd', cxtj: '' }, success: function (res) {
+        //     console.log(res);
+        //     console.log(res.data.Table1)
+        //     console.log(res.data.Table2)
+        //     console.log(res.data.Table3)
+        //   }
+        // })
+      }
+    });
+    $(function () {
+      // cx();
+      var str = getcols(cols);
+      // console.log('str=' + str)
+    })
+    function getcols(array) {
+      if (!array) return "";
+      var fstr = "", mcstr = ""
+      array.forEach(element => {
+        if (element.field && !element.mcfield) {
+          fstr = fstr + element.field + ','
+        }
+        if (element.mcfield) {
+          mcstr = mcstr + element.field + ','
+        }
+      });
+      fstr = fstr.substring(0, fstr.length - 1)
+      return fstr + '|' + mcstr
+    }
+    function cx() {
+      admin.post({
+        api: 'getAllData', data: tjson, success: function (res) {
+          console.log(res);
+
+        }
+      })
+    }
+    admin.util.event('lay-active-test2', {
+      cx: function () {
+        admin.popup({
+          url: '/sys/cx', data: { menumc: menumc }, yes: function (index, layero) {
+            var data = form.val("form-group-cx");
+            //layer.close(index);
+            // postdataTable.cxtj = JSON.stringify(data)
+            //console.log(tableIns)
+            table.reload(tableid_test2,{where: { cxtj: JSON.stringify(data) }},true )
+            // table.reload(tableid_test2, {
+            //   url: tableurl, where: postdataTable
+            // });
+
+          }
+        });
+      },
+      add: function () {
+
+        admin.popup({ url: '/sys/test/test2_1', area: ['35%', '100%'], offset: 'r',anim:1, });
+      },
+      edit: function () {
+
+        var checkStatus = table.checkStatus(tableid_test2);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        var json = { bmbhid: data[0].bmbhid }
+        //console.log(json)
+        //postdataEdit.bmbhid = data[0].bmbhid
+        $.extend(json, postdata)
+        //console.log(json)
+        tjson.bmbhid = data[0].bmbhid
+        tjson.rowid = data[0].bmbhid
+        console.log(tjson)
+        pd.bmbhid=data[0].bmbhid
+        pd.rowid=data[0].bmbhid
+        admin.popup({ url: '/sys/test/test2_1', data: pd, area: ['40%', '100%'], offset: 'r' });
+      },
+      del: function () {
+        console.log(postdata)
+        var checkStatus = table.checkStatus(tableid_test2);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        layer.confirm('确定要删除该数据?', {
+          btn: ['确定', '取消'] //按钮
+        }, function () {
+          postdataEdit.bmbhid = data[0].bmbhid
+          tjson.bmbhid = data[0].bmbhid
+          admin.post({
+            api: 'delOneData', data: tjson, success: function (res) {
+              if (res.flag) {
+                table.reload(tableid_test2, { url: tableurl });
+                layer.msg(res.msg);
+
+              } else {
+                layer.alert(res.msg);
+              }
+            }
+          })
+        }, function () {
+
+        });
+
+
+      },
+      tablesx: function () {
+        layer.msg('tablesx')
+        tableIns.reload({ url: tableurl })
+      },
+      export: function () {
+        //window.open(conf.requestUrl + '/qxgl/DownloadExcel');
+
+        table.exportFile(tableid_test2, null, 'xlsx');
+      },
+      print: function () {
+        admin.post({
+          url: '/pdfdoc/GetPdf', success: function (res) {
+            if (res.flag) {
+              layer.msg(res.msg);
+              window.open(conf.requestUrl + res.src)
+            } else {
+              layer.alert(res.msg);
+            }
+          }
+        })
+
+      }
+    });
+
+  })
+
+
+</script>

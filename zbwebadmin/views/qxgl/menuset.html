@@ -1,0 +1,96 @@
+<div class="layui-fluid" lay-title="菜单查询">
+
+    <div class="layui-card">
+      <div class="layui-card-body nepadmin-table-full">
+        <table id="list-table-menuset" lay-filter="list-table-menuset"></table>
+      </div>
+    </div>
+  </div>
+  
+  
+  <script>
+    // layui.use(['admin', 'table'], function (admin, table) {
+      var admin=layui.admin
+      var table=layui.table
+      // var menumc = admin.getTitle();
+      var url = '/qxgl/getMenuEdit';
+      var tableid_menuset = 'list-table-menuset';
+      admin.table({
+        elem: tableid_menuset,
+        url: url,
+        cols: [[
+          { type: 'radio' },
+          { title: '菜单ID', field: 'zybh', width: 100,sort:true },
+          { title: '菜单名称', field: 'title', width: 150 },
+          { title: 'fcode', field: 'fcode', width: 120 },
+          { title: 'href', field: 'href', width: 120 },
+          { title: 'icon', field: 'icon', width: 120 },
+          { title: '是否显示', field: 'isvisible', width: 80 },
+          { title: 'menuid', field: 'menuid', width: 80 },
+        ]],
+        done:function(res, curr, count){
+
+        }
+      });
+      admin.util.event('lay-active-menuset', {
+  
+        cx: function () {
+        admin.popup({
+          url: '/sys/cx', data: { menumc: admin.getTitle()}, yes: function (index, layero) {
+            var data = layui.form.val("form-group-cx");
+            table.reload(tableid_menuset, {
+              where: { cxtj: JSON.stringify(data) }},true);
+          }
+        });
+      }
+        , edit: function () {
+          var checkStatus = table.checkStatus(tableid_menuset);
+          var data = checkStatus.data;
+          if (data.length == 0) {
+            layer.msg('请选择一行!');
+            return;
+          }
+          admin.popup({ url: '/qxgl/menuinput', data: { menuid: data[0].menuid }, area: ['50%', '80%'],offset: 'r', });
+  
+        }
+        , del: function () {
+          var checkStatus = table.checkStatus(tableid_menuset);
+          var data = checkStatus.data;
+          if (data.length == 0) {
+            layer.msg('请选择一行!');
+            return;
+          }
+          layer.confirm('确定要删除该数据?', {
+            btn: ['确定', '取消'] //按钮
+          }, function () {
+            admin.post({
+              url: '/qxgl/delYhzzd', data: { menuid: data[0].menuid }, success: function (res) {
+                if (res.flag) {
+                  layer.msg(res.msg);
+                  table.reload(tableid_menuset, true);
+                } else {
+                  layer.alert(res.msg);
+                }
+              }
+            })
+          }, function () {
+  
+          });
+  
+        }
+        , add: function () {
+          admin.popup({ url: '/qxgl/menuinput', data: {}, area: ['50%', '70%'],offset: 'r', })
+        }
+        ,cxset:function(){
+          var checkStatus = table.checkStatus(tableid_menuset);
+          var data = checkStatus.data;
+          if (data.length == 0) {
+            layer.msg('请选择一行!');
+            return;
+          }
+          admin.popup({ url: '/qxgl/cxtjqx', data: {menuid:data[0].menuid}, area: ['60%', '100%'],offset: 'r', })
+        }
+      });
+     
+    // })
+  </script>

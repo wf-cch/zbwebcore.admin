@@ -1,0 +1,79 @@
+<div class="layui-fluid" lay-title="用户组录入">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" action="" lay-filter="form-group-yhzsetinput">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户组ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="yhzid" class="layui-input" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户组名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="yhzmc" lay-verify="required" placeholder="请输入" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+
+                <button lay-submit lay-filter="save" style="display: none;"></button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['admin', 'form', 'jquery', 'table'], function (admin, form, $, table) {
+
+        form.render();
+        $('[name=yhzmc]').focus();
+        var url = '/qxgl/getYhzzd';
+        var yhzid = POPUP_DATA.yhzid;
+        if (yhzid != undefined && yhzid != '') {
+            admin.post({
+                url: '/qxgl/getYhzzdOne', data: { yhzid: yhzid }, success: function (res) {
+                    if (res.flag) {
+                        form.val('form-group-yhzsetinput', res.data[0]);
+                    } else {
+                        layer.alert(res.msg);
+                    }
+                }
+            })
+        }
+        form.on('submit(save)', function (d) {
+            admin.post({
+                url: '/qxgl/saveYhzzd', data: { data: JSON.stringify(d.field) }, success: function (res) {
+                    if (res.flag) {
+                        layer.msg(res.msg);
+                        table.reload('list-table-yhzset', { url: '/qxgl/getYhzzd' });
+                        if (yhzid == undefined || yhzid == '') {
+                            $('[name=yhzid]').val(res.datanum);
+                            var index = layer.confirm('保存成功!是否继续录入数据?', {
+                                btn: ['是', '否'] //按钮
+                            }, function () {
+                                $('[name=yhzid]').val('');
+                                $('[name=yhzmc]').val('');
+                                $('[name=yhzmc]').focus();
+                                layer.close(index);
+                            }, function () {
+                                layer.closeAll();
+                            });
+                        }else{
+                            layer.close();
+                        }
+
+                    } else {
+                        layer.alert(res.msg);
+                    }
+
+                }
+            });
+            return false;
+        });
+        admin.util.event('lay-active-yhzsetinput', {
+            save: function () {
+                $('[lay-filter="save"]').trigger('click');
+            }
+        });
+
+    })
+</script>

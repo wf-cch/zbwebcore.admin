@@ -1,0 +1,297 @@
+<div class="layui-fluid" lay-title="ailabelTest">
+    <style>
+        #map {
+            height: 500px;
+            border: 1px solid #f00;
+            position: relative;
+        }
+    </style>
+    <div style="margin: 10px;">
+        <button ailid="pan" class="layui-btn layui-btn-normal layui-btn-sm">浏览</button>
+        <!-- <button ailid="zoomIn" class="layui-btn layui-btn-normal layui-btn-sm">放大</button> -->
+        <button ailid="drawRect" class="layui-btn layui-btn-normal layui-btn-sm">绘制矩形</button>
+        <button ailid="drawPolygon" class="layui-btn layui-btn-normal layui-btn-sm">绘制多边形</button>
+        <button ailid="drawPoint" class="layui-btn layui-btn-normal layui-btn-sm">绘制点</button>
+        <button ailid="save" class="layui-btn layui-btn-normal layui-btn-sm">保存</button>
+    </div>
+
+    <!-- <button id="drawRoi" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('drawRoi')">绘制ROI</button>
+    <button id="drawNotRoi" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('drawNotRoi')">绘制非ROI</button>
+
+    <button id="drawMask" class="layui-btn layui-btn-normal layui-btn-sm" style="background-color: #3377ff;"
+        onclick="setMode('drawMask', '#FF0000', 10)">掩膜:红色:10</button>
+    <button id="drawMask2" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('drawMask2', 'rgba(0,0,255,1)', 20)">掩膜:蓝色:20</button>
+    <button id="drawMask3" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('drawMask3', '#9370DB', 30)">掩膜:紫色:30</button>
+    <button id="clearMask" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('clearMask')">掩膜:擦除</button>
+    <button id="clearMask" class="layui-btn layui-btn-normal layui-btn-sm" onclick="getMaskPixels()">获取涂抹像素数据</button>
+    <button id="clearMask" class="layui-btn layui-btn-normal layui-btn-sm" onclick="getDefaultMaskPixels()">server涂抹数据回显</button>
+    
+    <button id="drawPolyline" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('drawPolyline', '#0000FF', 10)">绘制多段线:蓝色:10</button>
+    <button id="drawPolyline2" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('drawPolyline2', '#9370DB', 20)">绘制多段线:紫色:20</button>
+    <button id="pan" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setMode('pan')">平移</button>
+    <button id="setcenter" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setCenter()">中心点设置(0,0)</button>
+    <button id="setZoom" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setZoom()">zoom设置(1000)</button>
+    <button id="setTipOff" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setTipOnOff(false)">关闭编辑tip提示</button>
+    <button id="setTipOn" class="layui-btn layui-btn-normal layui-btn-sm" onclick="setTipOnOff(true)">打开编辑tip提示</button>
+     -->
+
+    <div id="map"></div>
+</div>
+<script>
+    layui.use(['admin', 'jquery'], function (admin, $) {
+        admin.loadjs(layui.cache.base + 'lay/extends/AILabel.pkg.min.js', function () {
+            layer.msg('load AILabel success')
+            // 常用样式声明
+            const gFetureStyle = new AILabel.Style({ strokeColor: '#0000FF', lineWeight: 2 });
+            const gTextStyle = new AILabel.Style({ fontColor: '#0000FF', strokeColor: '#0000FF', opacity: 0 });
+            // 容器对象声明
+            let gMap = new AILabel.Map('map', { zoom: 1080, cx: 0, cy: 0, zoomMax: 650 * 10, zoomMin: 650 / 10, autoFeatureSelect: true });
+
+            // 设置当前操作模式为‘drawRect’
+            gMap.setMode('pan', gFetureStyle);
+
+            // 图片层实例\添加
+            let gImageLayer = new AILabel.Layer.Image('img', '/zbwebadmin/images/ailabelimgs/mask_img.jpg', { w: 1080, h: 720 }, { zIndex: 1 });
+            gMap.addLayer(gImageLayer);
+            // 矢量层实例\添加
+            let gFeatureLayer = new AILabel.Layer.Feature('featureLayer', { zIndex: 2, transparent: true });
+            gMap.addLayer(gFeatureLayer);
+
+            // 文本层实例\添加
+            let gTextLayer = new AILabel.Layer.Text('textLayer', { zIndex: 4 });
+            gMap.addLayer(gTextLayer);
+
+            //显示提示框
+            // gMap.tipLayer.showTips();
+            gMap.events.on('geometryDrawDone', function (type, points) {
+                // 生成元素唯一标志（时间戳）
+                const timestamp = new Date().getTime();
+                // 元素添加展示
+                let fea = new AILabel.Feature.Rect(`feature-${timestamp}`, points, {
+                    name: '中国'
+                }, gFetureStyle);
+                gFeatureLayer.addFeature(fea);
+            });
+            gMap.events.on('geometryEditDone', function (type, activeFeature, points) {
+                activeFeature.update({ points });
+                activeFeature.show();
+            });
+            // feature-reset监听
+            gMap.events.on('featureStatusReset', function () {
+                gMap.mLayer.removeAllMarkers();
+            });
+
+            gMap.events.on('geometryEditing', function (type, feature, points) {
+                if (!gMap.mLayer) return;
+                const marker = gMap.mLayer.getMarkerById(`marker-${feature.id}`);
+                if (!marker) return;
+                const bounds = AILabel.Util.getBounds(points);
+                const leftTopPoint = bounds[0]; // 边界坐上角坐标
+                marker.update({ x: leftTopPoint.x, y: leftTopPoint.y });
+            });
+
+            gMap.events.on('featureSelected', function (feature) {
+                let cFeature = feature;
+                // 删除按钮添加
+                const featureBounds = cFeature.getBounds();
+                const leftTopPoint = featureBounds[0]; // 边界坐上角坐标
+                let deleteMarker = new AILabel.Marker(`marker-${cFeature.id}`,
+                    {
+                        src: '/zbwebadmin/images/ailabelimgs/delete.png',
+                        x: leftTopPoint.x,
+                        y: leftTopPoint.y,
+                        offset: {
+                            x: 0,
+                            y: 0
+                        },
+                        featureId: cFeature.id
+                    });
+                gMap.mLayer.addMarker(deleteMarker);
+
+                deleteMarker.regEvent('click', function () {
+                    // 执行选中元素删除
+                    gFeatureLayer.removeFeatureById(this.info.featureId);
+                    // 对应删除标注层中删除（x）icon
+                    gMap.mLayer.removeAllMarkers();
+                });
+            });
+
+            // const timestamp = new Date(); // 关联标志
+            // const feature = new AILabel.Feature.Polygon(`feature-${timestamp}`, .....);
+
+            // // positon可通过feature.points空间数据关联
+            // const text = new AILabel.Text(`text-${timestamp}`, .....);
+
+            // // positon可通过feature.points空间数据关联
+            // const marker = new AILabel.Marker(`marker-${timestamp}`, .....);
+
+            // featureLayer.addFeature(feature);
+            // textLayer.addText(text);
+            // gMap.mLayer.addMarker(marker);
+
+            // // 删除
+            // marker.regEvent('click', function () {
+            //     // this指当前对象marker
+            //     const releateKey = this.id.split('-')[1];
+            //     featureLayer.removeFeatureById(`feature-${releateKey}`);
+            //     textLayer.removeTextById(`text-${releateKey}`);
+            //     gMap.mLayer.removeMarkerById(`marker-${releateKey}`);
+            // };
+
+            window.onresize = function () {
+                gMap && gMap.resize();
+            };
+
+            let globalRoiType = null;
+
+            admin.util.event('ailid', {
+                pan: function () {
+                    gMap.setMode('pan')
+                    layer.msg('已设置为浏览模式')
+                }
+                , zoomIn: function () {
+                    gMap && gMap.zoomIn();
+                }
+                , drawRect: function () {
+                    gMap.setMode('drawRect', gFetureStyle)
+                    layer.msg('已设置绘制矩形')
+                }
+                , drawPolygon: function () {
+                    gMap.setMode('drawPolygon', gFetureStyle)
+                    layer.msg('已设置绘制多边形')
+                }
+                , drawPoint: function () {
+                    gMap.setMode('drawPoint', mappingStyles.drawPoint)
+                    layer.msg('已设置绘制点')
+                }
+                , save: function () {
+                    var all = gMap.getAllLayers();
+                    const allFeatures = gFeatureLayer.getAllFeatures();
+                    console.log(allFeatures)
+                    layer.msg('已保存')
+                }
+            })
+            // 矢量要素实例\添加
+            const fea1 = new AILabel.Feature.Polygon('id-dbx', [
+                { x: 10, y: 10 },
+                { x: 50, y: 10 },
+                { x: 40, y: 50 },
+                { x: 20, y: 60 },
+                { x: 10, y: 10 }
+            ], { name: '中国' }, gFetureStyle);
+            gFeatureLayer.addFeature(fea1);
+            const fea2 = new AILabel.Feature.Rect('id-jx', [
+                { x: -379.5381, y: 139.6335 },
+                { x: -293.903, y: 139.6335 },
+                { x: -293.903, y: 86.4233 },
+                { x: -379.5381, y: 86.4233 }
+            ], { name: '中国' }, gFetureStyle);
+            gFeatureLayer.addFeature(fea2);
+
+            // 文本实例\添加
+            const text = new AILabel.Text('id', {
+                pos: { x: 100, y: 100 },
+                offset: { x: 0, y: 0 },
+                width: 100, // maxwidth
+                text: '中国'
+            }, gTextStyle);
+            gTextLayer.addText(text);
+            // let cfeature = gFeatureLayer.getFeatureById('id-jx');
+            // fea2.hover(function(){
+            //     layer.msg('hover')
+            // })
+            // fea2.regEvent('click', function (d) {
+            //     layer.msg('点击了矩形')
+            // })
+            // gMap.events.on('mouseDown', wxy =>  {
+            //     console.log(wxy)
+            //     console.log('xy');
+            //     });
+            var flag=true;
+            var id=""
+            gMap.events.on('featureHover', feature => {
+                id=feature.id
+                if(!feature) return;
+                
+                if(id==feature.id){
+                    console.log(feature.id)
+                    id=""
+                }
+                
+                // if(!feature){
+                //     flag=true;
+                // }else{
+                //     if(flag){
+                //     // flag=true
+                //     console.log(feature.id)
+                //     }else{
+                //         flag=false
+                //     }
+                // }
+  
+            })  
+            // gMap.events.on('featureWillSelected', feature => {
+            //     if(!feature) return;
+            //     console.log(feature)
+            // })  
+            function setCenter() {
+                gMap && gMap.setCenter(0, 0);
+            }
+
+            function setZoom() {
+                gMap && gMap.setZoom(1000);
+            }
+
+            function setTipOnOff(show) {
+                if (show) {
+                    gMap && gMap.tipLayer.showTips();
+                }
+                else {
+                    gMap && gMap.tipLayer.hideTips();
+                }
+            }
+
+            const mappingStyles = {
+                drawRect: {
+                    drawStyle: { strokeColor: '#FF0000', opacity: 1, lineWeight: 1 },
+                    featureStyle: { strokeColor: '#00FF00', fillColor: '#0000FF', opacity: .3, lineWeight: 1 }
+                },
+                drawRoi: {
+                    drawStyle: { strokeColor: '#00FF00', opacity: 1, lineWeight: 1 },
+                    featureStyle: { strokeColor: '#0000FF', fillColor: '#00FF00', opacity: .3, lineWeight: 1 }
+                },
+                drawNotRoi: {
+                    drawStyle: { strokeColor: '#00FF00', opacity: 1, lineWeight: 1 },
+                    featureStyle: { strokeColor: '#0000FF', fillColor: '#00FF00', opacity: .3, lineWeight: 1 }
+                },
+                drawPolygon: {
+                    drawStyle: { strokeColor: '#00FF00', opacity: 1, lineWeight: 1 },
+                    featureStyle: { strokeColor: '#0000FF', fillColor: '#00FF00', opacity: .3, lineWeight: 1 }
+                },
+                drawMask: {
+                    drawStyle: { strokeColor: '#FF0000', fillColor: '#0000FF', opacity: 1, lineWeight: 1 },
+                    featureStyle: {}
+                },
+                clearMask: {
+                    drawStyle: { lineWeight: 30 },
+                    featureStyle: {}
+                },
+                drawPoint: {
+                    drawStyle: { pointRadius: 5 },
+                    featureStyle: { strokeColor: '#0000FF', fillColor: '#8B008B', opacity: 1, pointRadius: 5 }
+                },
+                drawPolyline: {
+                    drawStyle: { strokeColor: '#FF0000', fillColor: '#0000FF', opacity: 1, lineWeight: 10 },
+                    featureStyle: { strokeColor: '#0000FF', fillColor: '#FF0000', opacity: .5, lineWeight: 10 }
+                },
+                pan: {
+                    drawStyle: {},
+                    featureStyle: {}
+                },
+
+            };
+        });
+
+
+    })
+</script>

@@ -1,0 +1,391 @@
+<div class="layui-fluid" lay-title="测试1">
+	<style>
+		.pictures {
+			list-style: none;
+			margin: 0;
+			max-width: 30rem;
+			padding: 0;
+		}
+
+		.pictures>li {
+			border: 1px solid transparent;
+			float: left;
+			height: calc(100% / 3);
+			margin: 0 -1px -1px 0;
+			overflow: hidden;
+			width: calc(100% / 3);
+		}
+
+		.pictures>li>img {
+			cursor: zoom-in;
+			width: 100%;
+		}
+	</style>
+	<div class="layui-card">
+		<div style="width: 90%;margin: 15px auto;">
+			<div class="layui-btn-group" style="margin-top: 10px">
+				<button class="layui-btn layui-btn-danger" lay-event="layerTiny">弹窗调用</button>
+				<button class="layui-btn" lay-event="setByAjax">Ajax加载数据</button>
+				<button class="layui-btn" lay-event="setContent">设置内容</button>
+				<button class="layui-btn" lay-event="insertContent">插入内容</button>
+				<button class="layui-btn" lay-event="getContent">获取内容</button>
+				<button class="layui-btn" lay-event="getText">获取文本</button>
+				<button class="layui-btn" lay-event="clearContent">清空内容</button>
+				<button class="layui-btn" lay-event="reload">重载(方式一)</button>
+				<button class="layui-btn" lay-event="reload2">重载(方式二)</button>
+				<button class="layui-btn" lay-event="destroy">销毁</button>
+				<button class="layui-btn" lay-event="render">加载(初始化)</button>
+			</div>
+			<hr />
+			<textarea name="" id="edit">这里是<span style="color: #e03e2d;"><em>edit初始化</em></span>的内容</textarea>
+			<br />
+			<hr />
+			同时插入第二个编辑器，配置相互独立
+			<hr />
+			<textarea name="" id="edit2">这里是<span style="color: #e03e2d;"><em>edit2初始化</em></span>的内容</textarea>
+		</div>
+
+	</div>
+	<div class="layui-card">
+
+		<div id="galley">
+			<ul class="pictures">
+				<li><img data-original="/zbwebadmin/images/login-bg.jpg" src="/zbwebadmin/images/login-bg.jpg"></li>
+				<li><img data-original="/zbwebadmin/images/login-bg.png" src="/zbwebadmin/images/login-bg.png"></li>
+				<li><img data-original="/zbwebadmin/images/bg-login.jpg" src="/zbwebadmin/images/bg-login.jpg"
+						alt="Jokhang Temple"></li>
+
+			</ul>
+		</div>
+
+		<br>
+		<div id="testpane" style="width: 600px;height: 300px;overflow:scroll;padding: 20px;">
+			<h1>测试</h1>
+			<a href="javascript:void(0)" id="tobig">放大</a><br>
+			<a href="javascript:void(0)" id="export">excel export</a><br>
+			<a href="javascript:void(0)" id="btnviewer">clickbtnviewer</a><br>
+			<a href="javascript:void(0)" id="getfiles">getfiles</a>
+			<table id="list-table-files" lay-filter="list-table-files"></table>
+		</div>
+		<div class="layui-card-body nepadmin-table-full">
+
+			<img id="imgtest" src="/zbwebadmin/images/test.png" usemap="#planetmap"
+				style="width: 600px;height: 700px;border: orange 2px solid;" />
+		</div>
+	</div>
+	<map name="planetmap" id="planetmap">
+
+
+	</map>
+	<a href="http://localhost:8080/upload/startmp4">startmp4</a>
+	<a href="http://localhost:8080/upload/downloadFileTest">downloadFileTest</a>
+	<a href="javascript:void(0)" id="testlayer">TEST layer</a>
+	<video width="320" height="240" controls>
+		<!-- <source src="http://localhost:8080/upload/startmp4" type="video/mp4"> -->
+		<!-- <source src="movie.ogg" type="video/ogg">
+		<source src="movie.webm" type="video/webm">
+		<object data="movie.mp4" width="320" height="240">
+		  <embed src="movie.swf" width="320" height="240">
+		</object> -->
+	</video>
+	<!-- <embed width="800" height="600" src="/zbwebadmin/images/gylsc.pdf"> -->
+	<!-- <div id="d1"></div> -->
+
+
+
+
+
+</div>
+<script type="text/html" id="tpltestlayer">
+	<div class="layui-btn-group" style="margin-top: 10px">
+		<button class="layui-btn layui-btn-danger" lay-event="aaa">ddddd</button>
+		<button class="layui-btn" lay-event="bbb">aaaaaassss</button>
+	</div>
+</script>
+<script>
+	layui.use(['admin', 'table', 'form', 'jquery', 'tinymce'], function (admin, table, form, $, t) {
+		$('#testlayer').click(function(){
+			
+		// 	parent.layer.open({type: 1,
+        //   area: ['50%', '50%'], //宽高
+        //   shadeClose: false,
+        //   moveOut: true,
+        //   maxmin: true,
+        //   shade: 0.01,
+        //   //offset: 'r',
+        //   resize: true,
+		//   content:$('#testpane'),
+		// //   zindex:99999999999
+		// })
+	});
+		t.render({
+			elem: "#edit",
+			// automatic_uploads: false,
+			//  images_upload_url:layui.conf.requestUrl +'/upload/UploadFile',
+			images_upload_handler: function (blobInfo, succFun, failFun) {
+
+				let formdata = new FormData()
+				formdata.set('file', blobInfo.blob())
+				admin.post({
+					url: '/upload/UploadFile', data: formdata, contentType: false, processData: false, success: function (res) {
+						console.log(res)
+						succFun(layui.conf.requestUrl + res.src)
+					}
+				})
+
+			},
+			height: 500
+			// 支持tinymce所有配置      
+		}, (opt, edit) => {
+			// 加载完成后回调 opt 是传入的所有参数
+			// edit是当前编辑器实例，等同于t.get返回值
+		});
+		t.render({
+			elem: "#edit2"
+			, height: 200
+		});
+
+		admin.util.event('lay-event', {
+			setByAjax: function () {
+				$.ajax({
+					url: 'mock/content.json',
+					success: function (res) {
+						t.get('#edit').setContent(res.data.content)
+					}
+				})
+			},
+			layerTiny: function () {
+				layer.open({
+					type: 1
+					, content: $('#layer-tiny')
+					, success: function () {
+						t.render({
+							elem: "#edit3"
+							, height: 200
+						});
+					}
+				})
+			},
+			getContent: function () {
+				var content = t.get('#edit').getContent()
+				console.log(content)
+				layer.alert(content)
+			},
+			setContent: function () {
+				t.get('#edit').setContent('点击按钮设置的内容：<span style="color: #e03e2d;">' + new Date() + '</span>')
+			},
+			clearContent: function () {
+				t.get('#edit').setContent('')
+			},
+			insertContent: function () {
+				t.get('#edit').insertContent('<b>插入内容</b>')
+			},
+			getText: function () {
+				var text = t.get('#edit').getContent({ format: 'text' })
+				layer.alert(text)
+			},
+			reload: function () {
+				t.reload({
+					elem: '#edit',
+					height: 230
+					// 所有参数都可以重新设置 ...
+				}, function (opt, edit) {
+					// 重载完成后回调函数，会把所有参数回传，
+					// 重载仅仅重新渲染编辑器，不会清空textarea，可手动清空或设置
+					t.get('#edit').setContent('')
+				})
+			},
+			reload2: function () {
+				t.reload('#edit', {
+					height: 250
+					// 所有参数都可以重新设置 ...
+				}, function (opt, edit) {
+					// 重载完成后回调函数，会把所有参数回传，
+					// 重载仅仅重新渲染编辑器，不会清空textarea，可手动清空或设置
+					edit.setContent('')
+				})
+			},
+			destroy: function () {
+				t.get('#edit').destroy()
+			},
+			render: function () {
+				t.render({ elem: '#edit', height: '300px' })
+			}
+		});
+		$('#export').click(function () {
+			layer.msg('测试导出百万数据')
+			window.open(layui.conf.requestUrl + '/qxgl/DownloadExcel');
+		})
+		console.log('layui.conf.requestUrl=' + layui.conf.requestUrl + '/upload/UploadFile')
+		admin.loadjs(layui.cache.base + 'lay/extends/viewer.min.js', function () {
+			layer.msg('load viewer success')
+			var galley = document.getElementById('galley');
+			console.log(galley)
+			var viewer = new Viewer(galley, {
+				url: 'data-original',
+				navbar: false,
+				zoomRatio: 0.4,
+				button: true,
+				title: false,
+				keyboard: false,
+				// title: function (image) {
+				// 	return image.alt + ' (' + (this.index + 1) + '/' + this.length + ')';
+				// },
+			});
+
+
+			$('#btnviewer').click(function (e) {
+				// var img = new Image();
+				// console.log(img)
+				// img.src='/zbwebadmin/images/bg-login.jpg';
+				// var img1 = new Image();
+				// img1.src = '/zbwebadmin/images/login-bg.jpg';
+				// var img2 = new Image();
+				// img2.src = '/zbwebadmin/images/login-bg.jpg';
+				// var img3 = new Image();
+				// img3.src = '/zbwebadmin/images/login-bg.jpg';
+				// var imgArr = new Array();
+				// imgArr.push(img1)
+				// imgArr.push(img2)
+				// imgArr.push(img3)
+
+				// console.log(imgArr)
+
+				//img.src='/zbwebadmin/images/bg-login.jpg';
+				// img1[0].src='/zbwebadmin/images/login-bg.jpg';
+				// img1[1].src='/zbwebadmin/images/login-bg.png';
+
+				// var d1 = document.getElementById("d1");
+				var d1 = document.createElement("d1");
+
+				var img = document.createElement("img");
+				img.src = "/zbwebadmin/images/login-bg.jpg";
+				d1.appendChild(img);
+				console.log(d1)
+				var img = document.createElement("img");
+				img.src = "/zbwebadmin/images/login-bg.png";
+				d1.appendChild(img);
+				console.log(d1)
+
+				var viewer = new Viewer(d1, {
+					hidden: function () {
+						viewer.destroy();
+					},
+					navbar: false,
+					zoomRatio: 0.4,
+					button: true,
+					title: false,
+					keyboard: false,
+				});
+				viewer.show();
+
+			})
+		});
+		admin.loadjs(layui.cache.base + 'lay/extends/AILabel.pkg.min.js', function () {
+			layer.msg('load AILabel success')
+
+		});
+
+		//$("#testpane").attr("style","overflow-x:scroll;overflow-y:scroll;height:inherit;width:25%");
+
+
+		var maphtml = '';
+		$('#imgtest').click(function (e) {
+
+			//获取鼠标在图片上的坐标
+			layer.msg('X：' + e.offsetX + '\n Y:' + e.offsetY);
+			// maphtml += '<area shape="rect" coords="' + e.offsetX + ',' + e.offsetY + ',' + (e.offsetX + 40) + ',' + (e.offsetY + 20) + '" href ="sohu.com" target ="_blank" alt="Venus" id="mapArea" />'
+			maphtml += '<area shape="circle" coords="' + (e.offsetX) + ',' + (e.offsetY) + ',30" href ="javascript:void(0);"  alt="Venus" id="' + e.offsetX + '" />'
+			$('#planetmap').html(maphtml);
+			console.log(maphtml)
+			$('area[id="' + (e.offsetX) + '"]').click(function () {
+				layer.msg('go to planetmap' + e.offsetX);
+			})
+			//获取元素相对于页面的坐标
+			//layer.msg('X：' + $(this).offset().left + '\n Y:' + $(this).offset().top)
+		});
+		// $('#planetmap[id="mapArea"]').click(function(){
+		// 	layer.msg('go to planetmap');
+		// })
+		// $('#mapArea').click(function(){
+		// 	layer.msg('go to mapArea');
+		// })
+		$('#tobig').click(function () {
+			$('#imgtest').css({ width: '1200px', heght: '1200px' })
+		})
+		admin.util.event('lay-active-test1', {
+			print: function () {
+				layer.msg('pprint')
+			}
+		})
+		var downloadFile = function (url, fileName) {//跨域文件路径、下载到本地的文件名
+			var x = new XMLHttpRequest();
+			x.open("GET", url, true);
+			x.responseType = 'blob';
+			x.onload = function (e) {
+				var url = window.URL.createObjectURL(x.response)
+				var a = document.createElement('a');
+				a.href = url
+				a.download = fileName;
+				a.click()
+			}
+			x.send();
+		}
+
+		var colsarray = [
+			// { type: 'radio' },
+			//   { type: 'checkbox' },
+			{ type: 'numbers' },
+			{
+				title: '文件名', field: 'name', width: 260, sort: true, templet: function (d) {
+					return '<a  href="' + layui.conf.requestUrl + d.url + '" target="_blank">' + d.name + '</a>'
+					//return '<a href="javascript:void(0)" onclick=downloadFile(\'' + layui.conf.requestUrl + d.url + '\',\'' + d.name + '\')>' + d.name + '</a>'
+
+				}
+			},
+			{ title: '创建时间', field: 'createtime', width: 160, sort: true },
+			{ title: '文件大小', field: 'size', width: 120, align: 'right', sort: true, },
+
+		]
+
+		var tablemain = table.render({
+			elem: '#list-table-files',
+			title: '用户表1',
+			height: '370',
+			page: true,
+			cols: [colsarray],
+			done: function (res) {
+
+			}
+
+		});
+		// table.on('row(list-table-files)', function (obj) {
+		// 	console.log(obj.tr) //得到当前行元素对象
+		// 	console.log(obj.data) //得到当前行数据
+		// 	//obj.del(); //删除当前行
+		// 	//obj.update(fields) //修改当前行数据
+		// });
+		table.on('tool(list-table-files)', function (obj) {
+			console.log(obj)
+			var data = obj.data;
+			if (obj.event === 'setname') {
+				console.log(data.name)
+				// downloadFile(layui.conf.requestUrl + '/files/'+data.name , data.name )
+			}
+		});
+		$('#getfiles').click(function () {
+			admin.post({
+				url: '/jczl/getAllFiles', success: function (res) {
+					if (res.flag) {
+						table.reload('list-table-files', { data: res.data });
+					} else {
+						layer.alert(res.msg);
+					}
+
+					console.log(res);
+				}
+			})
+		})
+	});
+
+</script>

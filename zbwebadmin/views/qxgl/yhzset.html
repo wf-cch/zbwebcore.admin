@@ -1,0 +1,81 @@
+<div class="layui-fluid" id="view-yhzset" lay-title="用户组查询">
+
+  <div class="layui-card">
+    <div class="layui-card-body nepadmin-table-full">
+      <table id="list-table-yhzset" lay-filter="list-table-yhzset"></table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  layui.use(['admin', 'table'], function (admin, table) {
+
+    var url = '/qxgl/getYhzzd';
+    var tableid_yhzset = 'list-table-yhzset';
+    admin.table({
+      elem: tableid_yhzset,
+      url: url,
+      cols: [[
+        { type: 'radio' },
+        { title: '用户组ID', field: 'yhzid', width: 100 },
+        { title: '用户组名称', field: 'yhzmc', width: 400 },
+
+      ]]
+    });
+    admin.util.event('lay-active-yhzset', {
+      cx: function () {
+        //table.reload(tableid_yhzset, { url: url });
+        admin.popup({ url: '/sys/cx', data: {url:url,tableid_yhzset:tableid_yhzset }, area: ['70%', '40%'],offset: 't', });
+      }
+      , edit: function () {
+        var checkStatus = table.checkStatus(tableid_yhzset);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        admin.popup({ url: '/qxgl/yhzsetinput', data: { yhzid: data[0].yhzid }, area: ['50%', '70%'],offset: 'r', });
+
+      }
+      , del: function () {
+        var checkStatus = table.checkStatus(tableid_yhzset);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        layer.confirm('确定要删除该数据?', {
+          btn: ['确定', '取消'] //按钮
+        }, function () {
+          admin.post({
+            url: '/qxgl/delYhzzd', data: { yhzid: data[0].yhzid }, success: function (res) {
+              if (res.flag) {
+                layer.msg(res.msg);
+                table.reload(tableid_yhzset, true);
+              } else {
+                layer.alert(res.msg);
+              }
+            }
+          })
+        }, function () {
+
+        });
+
+      }
+      , add: function () {
+        admin.popup({ url: '/qxgl/yhzsetinput', data: {}, area: ['50%', '70%'],offset: 'r', })
+      }
+      ,qxset:function(){
+        var checkStatus = table.checkStatus(tableid_yhzset);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        admin.popup({ url: '/qxgl/yhzqx', data: {yhzid:data[0].yhzid}, area: ['60%', '100%'],offset: 'r',title:'用户组：'+data[0].yhzmc })
+      }
+    });
+   
+  })
+</script>

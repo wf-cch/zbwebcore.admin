@@ -1,0 +1,896 @@
+<div class="layui-fluid" lay-title="测试3a">
+  <div class="layui-row layui-col-space10">
+    <div class="layui-col-lg4">
+      <div class="layui-card">
+        <div class="layui-card-body">
+          <h1 style="padding-bottom: 5px;">测试测试</h1>
+          <script type="text/html" id="tpl-djzt">
+            <span class="layui-badge layui-bg-gray">No.{{d.dh}}</span>
+
+            {{#  if(d.djzt === '01已保存'){ }}
+            <span class="layui-badge layui-bg-green">{{d.djzt}}</span>
+            {{#  } else if(d.djzt.indexOf('02')>=0){ }}
+            <span class="layui-badge layui-bg-cyan">{{d.djzt}}</span>
+            {{#  } else if(d.djzt === '03已审核'){ }}
+            <span class="layui-badge ">{{d.djzt}}</span>
+            {{#  } else { }}
+            {{ d.djzt }}
+            {{#  } }}
+
+            <span class="layui-badge layui-bg-blue">审核人:{{d.zxr}}</span>
+           
+          </script>
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-lg8">
+      <div class="layui-card">
+        <div class="layui-card-body">
+
+          <script type="text/html" id="tpl-djzt1">
+            <span class="layui-badge layui-bg-gray">No.{{d.dh}}</span>
+
+            {{#  if(d.djzt === '01已保存'){ }}
+            <span class="layui-badge layui-bg-green">{{d.djzt}}</span>
+            {{#  } else if(d.djzt.indexOf('02')>=0){ }}
+            <span class="layui-badge layui-bg-cyan">{{d.djzt}}</span>
+            {{#  } else if(d.djzt === '03已审核'){ }}
+            <span class="layui-badge ">{{d.djzt}}</span>
+            {{#  } else { }}
+            {{ d.djzt }}
+            {{#  } }}
+
+            <span class="layui-badge layui-bg-blue">审核人:{{d.zxr}}</span>
+           
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="layui-row layui-col-space10">
+    <div class="layui-col-lg12">
+      <div class="layui-card">
+        <div class="layui-card-body">
+          <form class="layui-form" action="" lay-filter="formtest1">
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label">多规则验证</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input"
+                    disabled>
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证日期</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="date" id="form-group-date" lay-verify="date" placeholder="yyyy-MM-dd"
+                    autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证链接</label>
+                <div class="layui-input-inline">
+                  <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">多规则验证</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证日期</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="date" id="form-group-dat2e" lay-verify="date" placeholder="yyyy-MM-dd"
+                    autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证链接</label>
+                <div class="layui-input-inline">
+                  <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证日期</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="date" id="form-group-date1" lay-verify="date" placeholder="yyyy-MM-dd"
+                    autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证链接</label>
+                <div class="layui-input-inline">
+                  <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+
+              <div class="layui-inline">
+                <label class="layui-form-label">验证日期</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off"
+                    class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label">验证链接</label>
+                <div class="layui-input-inline">
+                  <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+
+            </div>
+
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="layui-row layui-col-space10">
+    <div class="layui-col-lg12">
+      <div class="layui-card">
+        <div class="layui-card-body">
+          <table id="list-table-test" lay-filter="list-table-test"></table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="layui-row layui-col-space10">
+    <div class="layui-col-lg6">
+      <div class="layui-card">
+        <div class="layui-card-body">
+          <table id="list-table-test2" lay-filter="list-table-test2"></table>
+
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-lg6">
+      <div class="layui-card">
+        <div class="layui-card-body">
+
+          <table id="list-table-test3" lay-filter="list-table-test3"></table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="layui-row layui-col-space10">
+
+    <div class="layui-col-lg6">
+      <div class="layui-card">
+        <div class="layui-card-body">
+          <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+              <li class="layui-this">主表</li>
+              <li>明细表</li>
+              <li>分类表</li>
+              <li>商品管理</li>
+              <li>订单管理</li>
+            </ul>
+            <div class="layui-tab-content" >
+              <div class="layui-tab-item layui-show">
+                <table id="list-table-test5" lay-filter="list-table-test2"></table>
+              </div>
+              <div class="layui-tab-item">内容2</div>
+              <div class="layui-tab-item">内容3</div>
+              <div class="layui-tab-item">内容4</div>
+              <div class="layui-tab-item">内容5</div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-lg6">
+      <div class="layui-card">
+        <div class="layui-card-body">
+
+          <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+              <li class="layui-this">主表</li>
+              <li>明细表</li>
+              <li>分类表</li>
+              <li>商品管理</li>
+              <li>订单管理订单管理</li>
+            </ul>
+            <div class="layui-tab-content" >
+              <div class="layui-tab-item layui-show">
+                <table id="list-table-test6" lay-filter="list-table-test2"></table>
+              </div>
+              <div class="layui-tab-item">内容2</div>
+              <div class="layui-tab-item">内容3</div>
+              <div class="layui-tab-item">内容4</div>
+              <div class="layui-tab-item">内容5</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script type="text/html" id="tplMoney">{{fixed(d.inputMoney)}}</script>
+<script type="text/html" id="toolbar">
+  <div class="layui-btn-group">
+    <button type="button" class="layui-btn layui-btn-warm layui-btn-sm" lay-event="table_add">增加</button>
+    <button type="button" class="layui-btn layui-btn-warm layui-btn-sm" lay-event="table_del">删除</button>
+    <button type="button" class="layui-btn layui-btn-warm layui-btn-sm" lay-event="table_edit">编辑</button>
+
+  </div>
+</script>
+<script>
+  layui.use(['admin', 'table', 'form', 'conf', 'xmSelect', 'jquery', 'laydate'], function (admin, table, form, conf, xmSelect, $, laydate) {
+    var menumc = admin.getTitle();
+    var url = '/fhp/getSpxsls';
+    var tableid = 'list-table-test';
+    var tableid2 = 'list-table-test2';
+    var tableid3 = 'list-table-test3';
+    var tableid6 = 'list-table-test6';
+    var djztdata = { djzt: '03已审核', zxr: '000001-管理员', dh: '04011001202012010001' }
+    admin.renderData('tpl-djzt', djztdata)
+    admin.renderData('tpl-djzt1', djztdata)
+
+
+    var colsarray = [
+      // { type: 'radio' },
+      { type: 'checkbox' },
+      { type: 'numbers' },
+      { title: 'spbh', field: 'spbh', width: 100, edit: 'text', sort: true },
+      { title: '商品名称', field: 'spmc', width: 200 },
+      { title: 'txm', field: 'txm', width: 150, edit: 'text', event: 'settxm', style: 'cursor: pointer;' }, //
+      {
+        title: 'lsj', field: 'lsj', width: 120, edit: 'number', templet: function (d) {
+          return admin.fixed(d.lsj, 3)
+
+        }
+      },
+      {
+        title: 'zxj', field: 'zxj', width: 120, edit: 'number', templet: function (d) {
+          return admin.fixed(d.zxj)
+
+        }
+      },
+      {
+        title: '所属用户组', field: 'jysl', width: 180, templet: function (d) {
+          return '<div id="jysl-' + d.LAY_TABLE_INDEX + '" ></div>'
+        }
+      },
+      {
+        title: '启用标记', field: 'qybj', width: 180, templet: function (d) {
+          return '<div id="qybj-' + d.LAY_TABLE_INDEX + '" ></div>'
+        }
+      },
+      {
+        title: '日期选择', field: 'rq', width: 180, event: 'date'
+      },
+      { title: 'yhbhid', field: 'yhbhid', width: 80, hide: true },
+    ]
+    admin.tableToolBtn(['add', 'del'])
+    var tablemain = table.render({
+      elem: '#' + tableid,
+      title: '用户表1',
+      url: '',
+      height: '370',
+      toolbar: admin.tableToolBtn(['add', 'del', 'import'])
+      , defaultToolbar: ['', '', 'filter', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+        title: '提示'
+        , layEvent: 'LAYTABLE_TIPS'
+        , icon: 'layui-icon-tips'
+      }],
+      // title: '',
+      page: false,
+
+      cols: [colsarray],
+      done: function (res) {
+
+        //修改一些css样式, 这里虽然能够使用, 但是还是不太友好, 努力中...
+        var cells = $('div[lay-id="' + tableid + '"] .layui-table-cell');
+        for (var i = 0; i < cells.length; i++) {
+          cells[i].style.overflow = 'unset';
+          cells[i].style.height = 'auto';
+        }
+
+        //渲染多选
+        res.data.forEach(item => {
+          var qybj = admin.xmselect({ el: 'qybj-' + item.LAY_TABLE_INDEX, data: data, size: 'mini', tableid: tableid })
+          qybj.setValue([item.qybj])
+          var jysl = admin.xmselect({ el: 'jysl-' + item.LAY_TABLE_INDEX, size: 'mini', data: jysldata, tableid: tableid })
+          jysl.setValue([item.jysl])
+
+        })
+
+      }
+
+    });
+
+    var tablemx = table.render({
+      elem: '#' + tableid2,
+      title: '用户表2',
+      url: '',
+      height: '370',
+      toolbar: 'default' //开启头部工具栏，并为其绑定左侧模板
+      , defaultToolbar: [],
+      // title: '',
+      page: false,
+
+      cols: [colsarray],
+      done: function (res) {
+        // //修改一些css样式, 这里虽然能够使用, 但是还是不太友好, 努力中...
+        // var cells = document.querySelectorAll('div[lay-id="' + tableid + '"] .layui-table-cell');
+        // for (var i = 0; i < cells.length; i++) {
+        //   cells[i].style.overflow = 'unset';
+        //   cells[i].style.height = 'auto';
+        // }
+
+        // //渲染多选
+        // res.data.forEach(item => {
+        //   var qybj = admin.xmselect({ el: 'qybj-' + item.LAY_TABLE_INDEX, data: data, size: 'mini', tableid: tableid })
+        //   qybj.setValue([item.qybj])
+        //   var jysl = admin.xmselect({ el: 'jysl-' + item.LAY_TABLE_INDEX, size: 'mini', data: jysldata, tableid: tableid })
+        //   jysl.setValue([item.jysl])
+
+        // })
+
+      }
+
+    });
+    var tablehtmx = table.render({
+      elem: '#' + tableid3,
+      title: '用户表3',
+      url: '',
+      height: '370',
+      toolbar: 'default', //开启头部工具栏，并为其绑定左侧模板
+      defaultToolbar: [],
+      //title: '',
+      page: false,
+
+      cols: [colsarray],
+      done: function (res) {
+        // //修改一些css样式, 这里虽然能够使用, 但是还是不太友好, 努力中...
+        // var cells = document.querySelectorAll('div[lay-id="' + tableid + '"] .layui-table-cell');
+        // for (var i = 0; i < cells.length; i++) {
+        //   cells[i].style.overflow = 'unset';
+        //   cells[i].style.height = 'auto';
+        // }
+
+        // //渲染多选
+        // res.data.forEach(item => {
+        //   var qybj = admin.xmselect({ el: 'qybj-' + item.LAY_TABLE_INDEX, data: data, size: 'mini', tableid: tableid })
+        //   qybj.setValue([item.qybj])
+        //   var jysl = admin.xmselect({ el: 'jysl-' + item.LAY_TABLE_INDEX, size: 'mini', data: jysldata, tableid: tableid })
+        //   jysl.setValue([item.jysl])
+
+        // })
+
+      }
+
+    });
+    var tablehtmx1 = table.render({
+      elem: '#' + tableid6,
+      title: '用户表3',
+      url: '',
+      height: '370',
+      toolbar: 'default', //开启头部工具栏，并为其绑定左侧模板
+      defaultToolbar: [],
+      //title: '',
+      page: false,
+
+      cols: [colsarray],
+      done: function (res) {
+        // //修改一些css样式, 这里虽然能够使用, 但是还是不太友好, 努力中...
+        // var cells = document.querySelectorAll('div[lay-id="' + tableid + '"] .layui-table-cell');
+        // for (var i = 0; i < cells.length; i++) {
+        //   cells[i].style.overflow = 'unset';
+        //   cells[i].style.height = 'auto';
+        // }
+
+        // //渲染多选
+        // res.data.forEach(item => {
+        //   var qybj = admin.xmselect({ el: 'qybj-' + item.LAY_TABLE_INDEX, data: data, size: 'mini', tableid: tableid })
+        //   qybj.setValue([item.qybj])
+        //   var jysl = admin.xmselect({ el: 'jysl-' + item.LAY_TABLE_INDEX, size: 'mini', data: jysldata, tableid: tableid })
+        //   jysl.setValue([item.jysl])
+
+        // })
+
+      }
+
+    });
+
+    form.render();
+    setTimeout(() => {
+      var oldData = table.cache[tableid];
+      if (oldData != undefined) {
+        tablemain.reload({ data: oldData })
+      }
+      console.log(oldData)
+    }, 500);
+
+    var data = [
+      { name: '张三', value: 1 },
+      { name: '李四', value: 2 },
+      { name: '王五', value: 3 },
+    ]
+    var jysldata = []
+    admin.post({
+      url: '/qxgl/getYhzzdAll', success: function (res) {
+        jysldata = res.data;
+      }
+    })
+    function isNumber(value) {         //验证是否为数字
+      var patrn = /^(-)?\d+(\.\d+)?$/;
+      if (patrn.exec(value) == null || value == "") {
+        return false
+      } else {
+        return true
+      }
+    }
+    //监听单元格事件
+    table.on('tool(' + tableid + ')', function (obj) {
+      var data = obj.data;
+      var newdata = {};
+      if (obj.event === 'date') {
+        var field = $(this).data('field');
+        laydate.render({
+          elem: this.firstChild
+          , show: true //直接显示
+          , closeStop: this
+          , done: function (value, date) {
+            newdata[field] = value;
+            obj.update(newdata);
+            console.log(JSON.stringify(table.cache[tableid]))
+          }
+        });
+      }
+    });
+    //监听编辑事件
+    table.on('edit(' + tableid + ')', function (obj) {
+
+      var oldValue = $(this).prev().text();
+      var dataChange = obj.data;
+      var indexChange = dataChange.LAY_TABLE_INDEX;
+      var trdom = obj.tr.selector;
+      var price = trdom.match(/\d+/);
+
+      // var tableId = obj.tr.closest('.layui-table-view').attr('lay-id');
+      var trIndex = obj.tr.data('index');
+      //var that = this;
+      var edittype = $(this).closest('td')[0].dataset.edit;
+      //console.log(edittype)
+
+      if (edittype == 'number' && !isNumber(obj.value)) {
+        layer.msg('请输入数字!');
+        obj.update({ [obj.field]: oldValue })
+        $(".layui-table-edit").val(oldValue);
+        //
+
+      } else {
+
+        if (obj.field == 'zxj') {
+
+          $(trdom + ' td[data-field="spbh"]').html('1232323')
+          obj.update({ 'spbh': '1232323' })
+        }
+      }
+
+    });
+    /*
+*编辑数据表格，键盘快捷键方法。
+*可跳过无编辑属性的列
+*tab 右边一个单元格
+*shift + tab 左边一个单元格
+*enter 下一行的单元格
+*shift + enter 上一行的单元格
+*/
+
+    //监听单元格事件
+    // table.on('tool-(' + tableid + ')', function (obj) {
+    //   var data = obj.data;
+    //   switch (obj.event) {
+    //     case 'settxm':
+    //       setval(obj, data.txm, 'txm')
+    //       break;
+    //     case 'setlsj':
+    //       setval(obj, data.lsj, 'lsj')
+    //       break;
+    //     case 'setjysl':
+    //       setval(obj, data.jysl, 'jysl')
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   function setval(obj, val, field) {
+    //     layer.prompt({
+    //       formType: 2
+    //       , title: '修改 ID 为 [' + data.id + '] 的用户签名'
+    //       , value: val
+    //     }, function (value, index) {
+    //       layer.close(index);
+    //       //这里一般是发送修改的Ajax请求
+    //       //同步更新表格和缓存对应的值
+    //       var str = "{'" + field + "':'" + value + "'}";
+    //       var json = eval('(' + str + ')');
+    //       obj.update(json);
+    //     });
+    //   }
+
+    // });
+    //头工具栏事件
+    //var jsonarray = [];
+
+    var i = 0;
+    table.on('toolbar(' + tableid + ')', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      console.log('checkStatus=' + checkStatus)
+      switch (obj.event) {
+        case 'add':
+          var oldData = table.cache[tableid] == undefined ? [] : table.cache[tableid];
+          // console.log(colsarray)
+          var newRow = {}
+          for (let index = 0; index < colsarray.length; index++) {
+            const element = colsarray[index];
+            //console.log(element)
+            if (element.field) {
+              newRow[element.field] = ''
+            }
+          }
+          //console.log(newRow)
+          i++;
+          // var newRow = {
+          //   spbh: i,
+          //   txm: 'test' + i,
+          //   lsj: '123.00',
+          //   jysl: '',
+          //   qybj: '',
+          //   rq: ''
+          // };
+
+          oldData.push(newRow);
+          table.reload(tableid, { data: oldData });
+          $('[lay-id="' + tableid + '"]').find('tr[data-index="' + (oldData.length - 1) + '"]').find('td[data-field="lsj"]').click()
+
+          $('[lay-id="' + tableid + '"]').on('keyup', '.layui-input', function (event) {
+            if (event.keyCode === 13) { // 回车
+              layui.stope(event);
+
+              var inputElem = $(this);
+              var tdNext = inputElem.parent().nextAll('[data-edit]');
+              // (tdNext && tdNext.length) ? tdNext.click() : $(this).blur();
+
+              if (tdNext && tdNext.length) {
+                //console.log('11');
+                tdNext.first().click();
+                $(".layui-table-edit").select()
+              } else {//换行
+                //console.log('22');
+                var trElement = $(this).closest('tr');
+                var trNext = trElement.next();
+                //trNext.length ? trNext.find('td[data-edit]').first().click() : inputElem.blur();//没有的就执行这个
+                trNext.length ? trNext.find('td[data-edit]').first().click() : $('[lay-id="' + tableid + '"]').find('[lay-event="add"]').click();
+                // trNext.select();
+                $(".layui-table-edit").select()
+              }
+
+            } else {
+              // console.log('keyup', 'event.keyCode', event.keyCode);
+            }
+
+          });
+
+          // 监听keyup事件
+          // $('[lay-id="' + tableid + '"]').on('keyup', 'td[data-field="lsj"]>input.layui-table-edit', function (event) {
+          //   validateNum(event, this);
+          // });
+
+          /**
+           * 为输入框校验合法数字
+           * @param event
+           * @param obj
+           */
+          function validateNum(event, obj) {
+            //响应鼠标事件，允许左右方向键移动
+            event = window.event || event;
+            if (event.keyCode == 37 | event.keyCode == 39) {
+              return;
+            }
+            var t = obj.value.charAt(0);
+            //先把非数字的都替换掉，除了数字和.
+            obj.value = obj.value.replace(/[^\d.]/g, "");
+            //必须保证第一个为数字而不是.
+            obj.value = obj.value.replace(/^\./g, "");
+            //保证只有出现一个.而没有多个.
+            obj.value = obj.value.replace(/\.{2,}/g, ".");
+            //保证.只出现一次，而不能出现两次以上
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            //如果第一位是负号，则允许添加   如果不允许添加负号 可以把这块注释掉
+            if (t == '-') {
+              obj.value = '-' + obj.value;
+            }
+          }
+          //   $('[lay-id="' + tableid + '"]').on('keyup', '.layui-input', function (e) {
+          //     console.log(e.keyCode)
+          //     if (e.keyCode === 13) {
+          //         var $el = $(e.target)
+          //         var $td = $el.parents('td')
+          //         var $nextTr = $td.parents('tr').next()
+
+          //         if($nextTr.length) {
+          //             $nextTr.find('td').eq($td.index()).trigger('click')
+          //         }
+          //     }
+          // })
+          // $('[lay-id="' + tableid + '"]').on('keydown keyup', '.layui-input',
+          //   function (event) {
+          //     console.log('aaaaaaaaaaaaa')
+          //     var td = $(this).parent('td'),
+          //       index = td.index(),
+          //       tr = td.parent('tr'),
+          //       isShift = $('[lay-id="' + tableid + '"]').data('shift'),
+          //       isKeydown = (event.type == "keydown");
+          //     console.log('isKeydown=' + isKeydown);
+          //     console.log('key=' + event.key)
+          //     switch (event.key) {
+          //       case "Shift":
+          //         $('[lay-id="' + tableid + '"]').data('shift', isKeydown);
+          //         break;
+          //       case "Tab":
+          //         event.preventDefault();
+          //         isKeydown && td[isShift ? 'prevAll' : 'nextAll']('[data-edit="text"]:first').click();
+          //         break;
+          //       case "Enter":
+          //         isKeydown && tr[isShift ? 'prev' : 'next']().children('td').eq(index).click();
+          //         break;
+          //     }
+          //   })
+          break;
+        case 'del':
+          var data = checkStatus.data;
+          var array = table.cache[tableid]
+          if (data.length == 0) {
+            layer.msg('请选择一行!');
+            return;
+          }
+
+          for (let index = array.length - 1; index >= 0; index--) {
+            const element = array[index];
+            if (element.LAY_CHECKED) {
+              array.splice(element.LAY_TABLE_INDEX, 1)
+            }
+          }
+          table.reload(tableid, { data: array })
+          i++
+
+          break;
+        case 'edit':
+          $('td[data-field="txm"]').data('edit', true)
+          $('tr[data-index="0"]').find('td[data-field="txm"]').click()
+          // table.cache[tableid]=null;
+          // console.log(table.cache[tableid])
+          layer.msg('ed')
+          break;
+
+        //自定义头工具栏右侧图标 - 提示
+        case 'LAYTABLE_TIPS':
+          layer.alert('这是工具栏右侧自定义的一个图标按钮');
+          break;
+      };
+    });
+
+
+    // table.on('row(' + tableid + ')', function (obj) {
+    //   var data = obj.data;
+
+    //   layer.alert(JSON.stringify(data), {
+    //     title: '当前行数据：'
+    //   });
+
+    //   //标注选中样式
+    //   obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+    // });
+    // var json={};
+    table.on('toolbar(' + tableid2 + ')', function (obj) {
+      switch (obj.event) {
+        case 'add':
+          var oldData = table.cache[tableid2] == undefined ? [] : table.cache[tableid2];
+          i++;
+          var newRow = {
+            spbh: i,
+            txm: 'test' + i,
+            lsj: '123.00',
+            jysl: '',
+            qybj: ''
+          };
+
+          oldData.push(newRow);
+          table.reload(tableid2, { data: oldData });
+          console.log('index=' + (oldData.length - 1))
+          $('[lay-id="' + tableid2 + '"]').find('tr[data-index="' + (oldData.length - 1) + '"]').find('td[data-field="lsj"]').click()
+          break;
+        case 'del':
+          var data = checkStatus.data;
+          var array = table.cache[tableid2]
+          if (data.length == 0) {
+            layer.msg('请选择一行!');
+            return;
+          }
+
+          for (let index = array.length - 1; index >= 0; index--) {
+            const element = array[index];
+            if (element.LAY_CHECKED) {
+              array.splice(element.LAY_TABLE_INDEX, 1)
+            }
+          }
+          table.reload(tableid2, { data: array })
+          i++
+
+          break;
+        case 'edit':
+          $('td[data-field="txm"]').data('edit', true)
+          $('tr[data-index="0"]').find('td[data-field="txm"]').click()
+          // table.cache[tableid]=null;
+          // console.log(table.cache[tableid])
+          layer.msg('ed')
+          break;
+
+      };
+    });
+    table.on('toolbar(=' + tableid2 + ')', function (obj) {
+      switch (obj.event) {
+        case 'add':
+          layer.msg(tableid2 + 'add')
+          break;
+        case 'del':
+          layer.msg(tableid2 + 'del')
+          break;
+        case 'edit':
+          layer.msg(tableid2 + 'edit')
+          break;
+
+      };
+    });
+    //监听编辑事件
+    // table.on('edit(' + tableid3 + ')', function (obj) {
+
+    //   var oldValue = $(this).prev().text();
+    //   var dataChange = obj.data;
+    //   var indexChange = dataChange.LAY_TABLE_INDEX;
+    //   var trdom = obj.tr.selector;
+    //   var price = trdom.match(/\d+/);
+
+    //   // var tableId = obj.tr.closest('.layui-table-view').attr('lay-id');
+    //   var trIndex = obj.tr.data('index');
+    //   //var that = this;
+    //   var edittype = $(this).closest('td')[0].dataset.edit;
+    //   //console.log(edittype)
+    //   console.log(obj.field)
+    //   if (obj.field == 'spbh') {
+
+    //     $(trdom + ' td[data-field="spmc"]').html('可口可乐')
+    //     obj.update({ 'spmc': '可口可乐' })
+    //   }
+    //   // if (edittype == 'number' && !isNumber(obj.value)) {
+    //   //   layer.msg('请输入数字!');
+    //   //   obj.update({ [obj.field]: oldValue })
+    //   //   $(".layui-table-edit").val(oldValue);
+    //   //   //
+
+    //   // } else {
+
+
+    //   // }
+
+    // });
+    table.reload(tableid3, { data: [{ spbh: '1223', txm: '222' }, { spbh: '1223', txm: '222' }, { spbh: '1223', txm: '222' }, { spbh: '1223', txm: '222' }, { spbh: '1223', txm: '222' }] })
+
+    //admin.DisabledEdit([tableid3,tableid],['formtest1'])
+
+
+    table.on('toolbar(' + tableid3 + ')', function (obj) {
+      switch (obj.event) {
+        case 'add':
+          admin.tableAddRow(tableid3, {
+            focus: 'spbh', defdata: { lsj: '500' },
+            editExtend: function (o) {
+              if (o.field == 'spbh') {
+                var spmc = '无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品无此商品'
+                if (o.value == '123456') spmc = '可口可乐'
+                if (o.value == '654321') spmc = '百事可乐'
+                admin.tableSetValue(o, 'spmc', spmc)
+                admin.tableSetValue(o, 'txm', '6978543212931')
+                //  var fieldkey = $(tableid3).find('[data-field=spbh"]').attr('data-key')
+                // var val=$('. laytable-cell-'+fieldkey).text()
+                // console.log('val='+val)
+
+                //   if(o.value==''||o.value==null){
+                //   layer.msg('不能为空!');
+                // }
+
+
+                if (spmc.indexOf('无此商品') >= 0) {
+                  // layer.msg(spmc)
+                  admin.tableSetValue(o, 'spbh', '')
+                  setTimeout(() => {
+                    admin.tableSetFocus(o, 'spbh')
+                  }, 200);
+
+                }
+
+              }
+
+            }
+          })
+          break;
+        case 'del':
+          admin.tableDelRow(tableid3)
+          break;
+        case 'edit':
+          console.log('edit')
+          $(' td[data-field="spmc"]').html('可口可乐')
+          break;
+
+      };
+    });
+    admin.util.event('lay-active-test3', {
+      add: function () {
+
+        admin.popup({ url: '/sys/test/test2_1', data: { yhbhid: '' }, area: ['30%', '100%'], offset: 'r', });
+      },
+      edit: function () {
+        var checkStatus = table.checkStatus(tableid);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        admin.popup({ url: '/sys/test/test3a', data: { yhbhid: data[0].yhbhid }, area: ['50%', '100%'], offset: 'r', });
+      },
+      save: function () {
+        var data1 = table.cache[tableid3]
+        console.log(data1)
+        var data2 = admin.tableGetData(tableid3, ['spmc', 'yhbhid'])
+        console.log(data2)
+        var data1 = table.cache[tableid3]
+        console.log(data1)
+      },
+      cx: function () {
+        admin.popup({
+          url: '/sys/cx', data: { menumc: menumc }, yes: function (index, layero) {
+            var data = form.val("form-group-cx");
+            //layer.close(index);
+            table.reload(tableid, {
+              url: url, where: { cxtj: JSON.stringify(data) }
+            });
+
+          }
+        });
+      }
+      , export: function () {
+        //window.open(conf.requestUrl + '/qxgl/DownloadExcel');
+
+        table.exportFile(tableid, null, 'xlsx');
+      }
+      , print: function () {
+        admin.post({
+          url: '/pdfdoc/GetPdf', success: function (res) {
+            if (res.flag) {
+              layer.msg(res.msg);
+              window.open(conf.requestUrl + res.src)
+            } else {
+              layer.alert(res.msg);
+            }
+          }
+        })
+
+      }
+    });
+
+  })
+
+
+</script>

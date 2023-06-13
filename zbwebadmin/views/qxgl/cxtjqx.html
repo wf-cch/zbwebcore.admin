@@ -1,0 +1,58 @@
+<div class="layui-fluid" lay-title="查询条件权限">
+    <div class="layui-col-xs12">
+        <div class="layui-row">
+            <div class="layui-card">
+                <div class="layui-card-body nepadmin-table-full">
+                    <table id="list-table-cxtjqx" lay-filter="list-table-cxtjqx"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['admin', 'table', 'jquery'], function (admin, table, $) {
+
+        var tablecxtjqx = 'list-table-cxtjqx';
+        table.render({
+            elem: '#' + tablecxtjqx,
+            height: 'full-170',
+            // size: 'sm',
+            page: false,
+            cols: [[
+                { type: 'checkbox' },
+                { title: '查询名称', field: 'cxtjmc', width: 120 },
+                { title: '查询字段名', field: 'cxtjcolumn', width: 180 },
+                { title: '查询条件ID', field: 'cxtjid', width: 400, hide: true },
+
+            ]],
+            done: function (res) {
+
+            }
+        });
+
+        admin.post({
+            url: '/qxgl/getCxtjQx', data: { menuid: POPUP_DATA.menuid }, success: function (res) {
+                table.reload(tablecxtjqx, { data: res.data });
+            }
+        })
+
+        admin.util.event('lay-active-cxtjqx', {
+            save: function () {
+                var checkStatus = table.checkStatus(tablecxtjqx);
+                var data = checkStatus.data;
+                admin.post({
+                    url: '/qxgl/saveCxtjQx', data: { menuid: POPUP_DATA.menuid, datacxtj: JSON.stringify(data) }, success: function (res) {
+                        if (res.flag) {
+                            layer.msg(res.msg);
+
+                        } else {
+                            layer.alert(res.msg);
+                        }
+                    }
+                })
+            }
+
+        });
+
+    })
+</script>

@@ -1,0 +1,62 @@
+<div class="layui-fluid" lay-title="条件查询">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" action="" lay-filter="form-group-cx">
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" name="menumc">
+<script>
+    layui.use(['admin', 'form', 'jquery', 'laydate', 'xmSelect'], function (admin, form, $, laydate, xmSelect) {
+
+        form.render();
+        $('[name=menumc]').val(POPUP_DATA.menumc);
+        admin.post({
+            url: '/qxgl/getCxtjHtml', data: { menumc: POPUP_DATA.menumc }, success: function (res) {
+                $('[lay-filter="form-group-cx"]').prepend(res.cxtjhtml);
+                var cxtjdata;
+                if (res.cxtjdata != "") {
+                    cxtjdata = eval('(' + res.cxtjdata + ')')
+                    form.val('form-group-cx', cxtjdata);
+                }
+                if ($('[name=ksjsrq]').length > 0) {
+
+                    laydate.render({
+                        elem: '[name=ksjsrq]'
+                        , range: true
+                        //,value: '1989-10-14 - 2019-12-28'
+                        //, isInitValue: true
+                    });
+                }
+                if ($('[name=ksrq]').length > 0) {
+
+                    laydate.render({
+                        elem: '[name=ksrq]'
+                        , theme: '#393D49'
+                        , trigger: 'click'
+                    });
+                }
+                if ($('[name=jsrq]').length > 0) {
+
+                    laydate.render({
+                        elem: '[name=jsrq]'
+                        , theme: '#393D49'
+                        //, range: true
+                        //,value: '1989-10-14 - 2019-12-28'
+                        , isInitValue: true
+                        , trigger: 'click'
+                    });
+                }
+                if ($('#fdbh').length > 0) {
+                    admin.xmselect({ el: 'fdbh', url: '/qxgl/getYhzzdAll', arr: cxtjdata.fdbh, style: { marginLeft: '110px', width: '150px', } });
+                }
+
+
+            }
+        })
+
+    })
+</script>

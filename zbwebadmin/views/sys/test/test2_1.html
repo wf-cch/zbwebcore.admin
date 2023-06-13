@@ -1,0 +1,198 @@
+<div class="layui-fluid" lay-title="*测试2录入" style="overflow:visible;">
+  <blockquote class="layui-elem-quote">
+    <div class="layui-btn-group">
+      <button class="layui-btn layui-btn-normal layui-btn-sm" lay-active-test3a="save">保存</button>
+    </div>
+  </blockquote>
+  <div class="layui-card"  style="height: 100%;">
+    <div class="layui-card-body" style="height:1200px;">
+      <form class="layui-form" lay-filter="form-group-Userinput">
+        <div class="layui-form-item">
+          <label class="layui-form-label">bmbh</label>
+          <div class="layui-input-block">
+            <input type="text" name="bmbh" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">bmmc</label>
+          <div class="layui-input-block">
+            <input type="text" name="bmmc" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">lx</label>
+          <div class="layui-input-block">
+            <div id="lx"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">供应商编号:</label>
+          <div class="layui-input-block">
+            <div id="gysbh"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">专柜编号:</label>
+          <div class="layui-input-block">
+            <div id="zgbh"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">选择框</label>
+          <div class="layui-input-block">
+            <select name="city" lay-verify="required">
+              <option value=""></option>
+              <option value="0">北京</option>
+              <option value="1">上海</option>
+              <option value="2">广州</option>
+              <option value="3">深圳</option>
+              <option value="4">杭州</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">测试多余字段</label>
+          <div class="layui-input-block">
+            <input type="text" name="test" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">测试日期date</label>
+          <div class="layui-input-block">
+            <input type="text" name="rq1" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">测试日期datetime</label>
+          <div class="layui-input-block">
+            <input type="text" name="rq2" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label class="layui-form-label">bmbhid</label>
+          <div class="layui-input-block">
+            <input type="text" name="bmbhid" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input"
+              readonly>
+          </div>
+        </div>
+
+        <button lay-submit lay-filter="save" style="display: none;"></button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  layui.use(['admin', 'form', 'jquery', 'table', 'xmSelect', 'laydate'], function (admin, form, $, table, xmSelect, laydate) {
+    form.render();
+     console.log(POPUP_DATA)
+    var bmbhid = POPUP_DATA.bmbhid;
+    var xjson = admin.getTnamefield()
+    // console.log(xjson)
+    // console.log(bmbhid)
+    var date = new Date();
+    // laydate.render({
+    //   elem: '[name=rq1]'
+    //   , value: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+    //   //, isInitValue: true
+    //   , theme: 'molv'
+    //   //, type: 'datetime'
+    //   //, showBottom: false
+    //   , trigger: 'click'
+    //   //,format: 'yyyy-MM-dd'
+    // });
+    admin.laydate({elem:'[name=rq1]',val:'2020-12-12'})
+    laydate.render({
+      elem: '[name=rq2]'
+      , value: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      , isInitValue: true
+      , theme: 'molv'
+      , type: 'datetime'
+      //, showBottom: false
+      , trigger: 'click'
+      //,format: 'yyyy-MM-dd H:m:s'
+    });
+    form.render()
+    var xmzgbh = admin.xmselect({ el: 'zgbh' });
+
+    var lxdata = [{ name: '01-招商部门', value: '01' }, { name: '02-销售部门', value: '02' }];
+    var xmlx = admin.xmselect({ el: 'lx', data: lxdata });
+    var xmgysbh = admin.xmselect({
+      el: 'gysbh', url: '/jczl/getSelectGyszd', page: true, radio: true, on: function (data) {
+        // console.log(data)
+        if (data.arr.length > 0) {
+
+          xmzgbh = admin.xmselect({ el: 'zgbh', url: '/jczl/getSelectZgzd', postdata: { arrstr: '890103' }, page: true, radio: false });
+        }
+
+      }
+    });
+
+
+    if (bmbhid) {
+      admin.post({
+        api: 'getOneData', data: POPUP_DATA, success: function (res) {
+          // console.log(res)
+          if (res.flag) {
+
+            form.val('form-group-Userinput', res.data[0]);
+            admin.xmsetval(xmgysbh, res.data[0].gysbh)
+            admin.xmsetval(xmzgbh, res.data[0].zgbh)
+            admin.xmsetval(xmlx, res.data[0].lx)
+
+            // $('[name=rq1]').val(admin.dateformat(res.data[0].rq1))
+            // $('[name=rq2]').val(admin.dateformat(res.data[0].rq2))
+            $('[name=bmbh]').attr("readonly", true)
+          } else {
+            layer.alert(res.msg, function (index) {
+              layer.closeAll();
+            });
+          }
+        }
+      })
+    }
+    form.on('submit(save)', function (d) {
+      // console.log(d)
+      POPUP_DATA.data = JSON.stringify(d.field)
+      admin.post({
+        api: 'saveData', data: POPUP_DATA, success: function (res) {
+          if (res.flag) {
+            //layer.msg(res.msg);
+            console.log(res)
+            //table.reload('list-table-test', { url: '/jczl/getAllData', tname: 'jczl_bmzd', tfield: 'bmbhid' });
+            $('[lay-active-test2="tablesx"]').trigger('click')
+            // if (bmbhid == undefined || bmbhid == '') {
+            $('[name=bmbhid]').val(res.datanum);
+            var index = layer.confirm('保存成功!是否继续录入数据?', {
+              btn: ['是', '否'] //按钮
+            }, function () {
+              $('[name=bmbh]').val('');
+              $('[name=bmbhid]').val('');
+              $('[name=bmbh]').focus();
+              layer.close(index);
+            }, function () {
+              layer.closeAll();
+            });
+            //}
+
+          } else {
+            layer.alert(res.msg);
+          }
+
+        }
+      });
+      return false;
+    });
+    admin.util.event('lay-active-test3a', {
+      save: function () {
+        $('[lay-filter="save"]').trigger('click');
+      }
+    });
+
+  })
+</script>

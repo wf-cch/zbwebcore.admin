@@ -1,0 +1,135 @@
+<div class="layui-fluid" lay-title="用户查询">
+  <div class="layui-card">
+    <div class="layui-card-body nepadmin-table-full">
+      <table id="list-table-userset" lay-filter="list-table-userset"></table>
+    </div>
+  </div>
+
+<span id="_upload"></span>
+<span id="_import"></span>
+</div>
+<style>
+
+</style>
+<script>
+  // layui.use(['admin', 'table', 'conf', 'upload'], function (admin, table, form, conf, upload) {
+    var admin=layui.admin;
+    var $=layui.$;
+    var table=layui.table;
+    // var menumc = admin.getTitle();
+    var url = '/qxgl/getUser';
+    var tableid_userset = 'list-table-userset';
+ 
+    admin.table({
+      elem:tableid_userset,
+      url:url,
+      cols: [[
+        { type: 'radio' },
+        { title: '用户编号', field: 'yhbh', width: 100, sort: true },
+        { title: '用户名称', field: 'yhmc', width: 150 },
+        { title: '手机号', field: 'sj', width: 120 },
+        { title: '用户昵称', field: 'yhnc', width: 120 },
+        { title: '所属用户组', field: 'yhzid', width: 120 },
+        { title: '启用标记', field: 'qybj', width: 80 },
+        { title: 'yhbhid', field: 'yhbhid', width: 80, hide: true },
+      ]]
+     
+    });
+    // setTimeout(() => {
+      admin.upload({
+        url: '/upload/UploadFile',elem:'#_upload', done: function (res) {
+          if (res.flag) {
+            console.log('upload success');
+          }
+        }
+      })
+      admin.upload({
+        url: '/upload/UploadExcel', elem: '#_import', done: function (res) {
+          console.log(res)
+          table.reload(tableid_userset, { data: [] })
+          if (res.flag) {
+            layer.msg('导入成功!');
+            //table.reload(tableid_userset, { url: url })
+            layui.table.reload(tableid_userset, { data: res.data })
+          } else {
+            layer.alert(res.msg);
+          }
+        }
+      })
+    // }, 1500);
+
+    layui.util.event('lay-active-userset', {
+      cx: function () {
+        admin.popup({
+          url: '/sys/cx', data: { menumc: admin.getTitle() }, yes: function (index, layero) {
+            var data = layui.form.val("form-group-cx");
+            layui.table.reload(tableid_userset, {
+              where: { cxtj: JSON.stringify(data) }
+            },true);
+          }
+        });
+      }
+      ,upload:function(){
+        console.log('upload')
+        $('#_upload').click();
+      }
+      ,import:function(){
+        console.log('import')
+        $('#_import').click();
+      }
+      , edit: function () {
+        var checkStatus = layui.table.checkStatus(tableid_userset);
+        var data = checkStatus.data;
+        var data1 = layui.table.checkStatus(tableid_userset).data;
+        console.log(data1)
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        admin.popup({ url: '/qxgl/userinput', data: { yhbhid: data[0].yhbhid }, area: ['40%', '80%'], offset: 'r', });
+        var data=layui.table.getData(tableid_userset)
+        console.log(data)
+      }
+      , del: function () {
+        var checkStatus = layui.table.checkStatus(tableid_userset);
+        var data = checkStatus.data;
+        if (data.length == 0) {
+          layer.msg('请选择一行!');
+          return;
+        }
+        layer.confirm('确定要删除该数据?', {
+          btn: ['确定', '取消'] //按钮
+        }, function () {
+          admin.post({
+            url: '/qxgl/delYhzd', data: { yhbhid: data[0].yhbhid }, success: function (res) {
+              if (res.flag) {
+                layer.msg(res.msg);
+                table.reload(tableid_userset, true);
+              } else {
+                layer.alert(res.msg);
+              }
+            }
+          })
+        }, function () {
+
+        });
+
+      }
+      , add: function () {
+        //获取表格当前数据
+        var mdata = table.cache[tableid_userset];
+        admin.popup({ url: '/qxgl/userinput', data: {}, area: ['40%', '70%'], offset: 'r', })
+      }
+      , export: function () {
+        console.log(table.cache[tableid_userset])
+        //window.open(conf.requestUrl + '/qxgl/DownloadExcel');
+        layui.table.exportFile(tableid_userset, null, 'xlsx');
+      }
+      // , import: function () {
+
+      // }
+    });
+
+  // })
+
+</script>

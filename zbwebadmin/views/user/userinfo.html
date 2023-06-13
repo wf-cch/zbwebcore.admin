@@ -1,0 +1,97 @@
+<div class="layui-fluid" lay-title="个人信息">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" action="" lay-filter="form-group-userinfo">
+                <div class="layui-row">
+                    <div  class="layui-col-md4">
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户编号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="yhbh" class="layui-input" lay-verify="required"
+                                        placeholder="请输入" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="yhmc" lay-verify="required" placeholder="请输入"
+                                        autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">手机号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="sj" lay-verify="required" placeholder="请输入"
+                                        autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">昵称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="yhnc" lay-verify="" placeholder="请输入" autocomplete="off"
+                                        class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">所属用户组</label>
+                                <div class="layui-input-block">
+
+                                    <div id="yhzid"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">启用标记</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="qybj" lay-verify="required" placeholder="请输入"
+                                        autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">yhbhid</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="yhbhid" disabled class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button lay-submit lay-filter="save" style="display: none;"></button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form','table'], function (admin, form,table) {
+        var router = layui.router()
+        var url = layui.url();
+        var name = admin.getUrlParam('yhmc')
+        var yhbh = admin.getUrlParam('yhbh')
+        var test = admin.getUrlParam('test')
+        console.log('name=' + name)
+        console.log('yhbh=' + yhbh)
+        console.log('test=' + test)
+
+
+        console.log(table.cache['list-table-userset'])
+        admin.post({
+            url: '/qxgl/getUserOne', success: function (res) {
+                form.val('form-group-userinfo', res.data[0]);
+            }
+        })
+    })
+</script>

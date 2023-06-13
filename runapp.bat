@@ -1,0 +1,1 @@
+supervisor --harmony -e css,js,html,node app.js

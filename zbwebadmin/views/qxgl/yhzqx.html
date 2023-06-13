@@ -1,0 +1,116 @@
+<div class="layui-fluid" lay-title="用户组权限">
+    <div class="layui-col-xs12">
+        <div class="layui-row">
+
+            <div class="layui-col-xs6">
+                <div class="layui-card">
+                    <div class="layui-card-body nepadmin-table-full">
+                        <table id="list-table-yhzmenuqx" lay-filter="list-table-yhzmenuqx"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-col-space1">
+                <div class="layui-card">
+                    <div class="layui-card-body nepadmin-table-full">
+                        <table id="list-table-yhzbtnqx" lay-filter="list-table-yhzbtnqx"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'table','jquery'], function (admin, table,$) {
+
+        var tablemenuid = 'list-table-yhzmenuqx';
+        var tablebtnid = 'list-table-yhzbtnqx';
+        table.render({
+            elem: '#' + tablemenuid,
+            height: 'full-120',
+            page: false,
+            limit: Number.MAX_VALUE,
+            cols: [[
+                { type: 'checkbox' },
+                { title: '菜单ID', field: 'zybh', width: 100 },
+                { title: '菜单名称', field: 'title', width: 180 },
+                { title: 'menuID', field: 'menuid', width: 400, hide: true },
+
+            ]],
+            done: function (res) {
+
+            }
+        });
+        table.render({
+            elem: '#' + tablebtnid,
+            height: 'full-120',
+            limit: Number.MAX_VALUE,
+            page: false,
+            cols: [[
+                { type: 'checkbox' },
+                { title: '按钮ID', field: 'btnid', width: 100 },
+                { title: '按钮名称', field: 'btnname', width: 180 },
+
+            ]],
+            done: function (res) {
+
+            }
+        });
+        //监听行单击事件（双击事件为：rowDouble）
+        var layertitle=$('.layui-layer-title').text();
+        var datamenuid="";
+        table.on('row(' + tablemenuid + ')', function (obj) {
+            var data = obj.data;
+            $('.layui-layer-title').text(layertitle+'-菜单：'+data.title);
+            if(data.zybh.length<3) {
+                table.reload(tablebtnid, { data: [] });
+                // layer.closeAll('loading');
+                return
+            };
+            datamenuid=data.menuid;
+            admin.post({
+            url: '/qxgl/getBtnMenu', data: {yhzid:POPUP_DATA.yhzid, menuid: data.menuid }, success: function (res) {
+                if(res.flag){
+                   table.reload(tablebtnid, { data: res.data });
+                }else{
+                    layer.alert(res.msg);
+                }
+                
+            }
+        })
+        });
+        admin.post({
+            url: '/qxgl/getMenuAll', data: { yhzid: POPUP_DATA.yhzid }, success: function (res) {
+                table.reload(tablemenuid, { data: res.data });
+            }
+        })
+
+        admin.util.event('lay-active-yhzqx', {
+            savemenu: function () {
+                var checkStatusmenu = table.checkStatus(tablemenuid);
+                var datamenu = checkStatusmenu.data;
+                admin.post({url:'/qxgl/saveYhzQx',data:{lx:'menu',yhzid:POPUP_DATA.yhzid,datamenu:JSON.stringify(datamenu) },success:function(res){
+                    if(res.flag){
+                        layer.msg(res.msg);
+
+                    }else{
+                        layer.alert(res.msg);
+                    }
+                }})
+            }
+            ,savebtn: function () {
+                var checkStatusbtn = table.checkStatus(tablebtnid);
+                var databtn = checkStatusbtn.data;
+                admin.post({url:'/qxgl/saveYhzQx',data:{lx:'btn',yhzid:POPUP_DATA.yhzid,menuid:datamenuid,databtn:JSON.stringify(databtn)},success:function(res){
+                    if(res.flag){
+                        layer.msg(res.msg);
+
+                    }else{
+                        layer.alert(res.msg);
+                    }
+                }})
+            }
+        });
+
+    })
+</script>

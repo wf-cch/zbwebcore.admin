@@ -1,0 +1,115 @@
+<div class="layui-fluid" lay-title="用户录入">
+  <div class="layui-card">
+    <div class="layui-card-body">
+      <form class="layui-form" action="" lay-filter="form-group-Userinput">
+        <div class="layui-form-item">
+          <label class="layui-form-label">用户编号</label>
+          <div class="layui-input-block">
+            <input type="text" name="yhbh" class="layui-input" lay-verify="required" placeholder="请输入"
+              autocomplete="off">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">用户名称</label>
+          <div class="layui-input-block">
+            <input type="text" name="yhmc" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">手机号</label>
+          <div class="layui-input-block">
+            <input type="text" name="sj" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">昵称</label>
+          <div class="layui-input-block">
+            <input type="text" name="yhnc" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">所属用户组</label>
+          <div class="layui-input-block">
+            <!-- <input type="text" name="yhzid" lay-verify="" placeholder="请输入" autocomplete="off" class="layui-input"> -->
+            <div id="yhzid"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">启用标记</label>
+          <div class="layui-input-block">
+            <input type="text" name="qybj" lay-verify="required" placeholder="请输入" autocomplete="off"
+              class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">yhbhid</label>
+          <div class="layui-input-block">
+            <input type="text" name="yhbhid" disabled class="layui-input">
+          </div>
+        </div>
+        <button lay-submit lay-filter="save" style="display: none;"></button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  layui.use(['admin', 'form', 'jquery', 'table', 'xmSelect'], function (admin, form, $, table, xmSelect) {
+    //form.render();
+    $('[name=yhbh]').focus();
+    var yhbhid = POPUP_DATA.yhbhid;
+
+    var xmyhzid = admin.xmselect({ el: 'yhzid', url: '/qxgl/getYhzzdAll' });
+    if (yhbhid != undefined && yhbhid != '') {
+      admin.post({
+        url: '/qxgl/getUserOne', data: { yhbhid: yhbhid }, success: function (res) {
+          if (res.flag) {
+            form.val('form-group-Userinput', res.data[0]);
+            //admin.xmselect({ el: 'yhzid', url: '/qxgl/getYhzzdAll', arr: res.data[0].yhzid });
+              admin.xmsetval(xmyhzid, res.data[0].yhzid)
+
+            
+          } else {
+            layer.alert(res.msg);
+          }
+        }
+      })
+    }
+    form.on('submit(save)', function (d) {
+      admin.post({
+        url: '/qxgl/saveUser', data: { data: JSON.stringify(d.field) }, success: function (res) {
+          if (res.flag) {
+            layer.msg(res.msg);
+            table.reload('list-table-userset',true);
+            //$('a[zbwebadmin-event="refresh"]').trigger('click')
+            //$('[lay-title="用户查询"]').prepend('<h4>No.1234567890123456789</h4>')
+            if (yhbhid == undefined || yhbhid == '') {
+              $('[name=yhbhid]').val(res.datanum);
+              var index = layer.confirm('保存成功!是否继续录入数据?', {
+                btn: ['是', '否'] //按钮
+              }, function () {
+                $('[name=yhbh]').val('');
+                $('[name=yhbhid]').val('');
+                $('[name=yhbh]').focus();
+                layer.close(index);
+              }, function () {
+                layer.closeAll();
+              });
+            }
+
+          } else {
+            layer.alert(res.msg);
+          }
+
+        }
+      });
+      return false;
+    });
+    admin.util.event('lay-active-userinput', {
+      save: function () {
+        $('[lay-filter="save"]').trigger('click');
+      }
+    });
+
+  })
+</script>

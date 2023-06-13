@@ -1,0 +1,12 @@
+//请求URL
+layui.define([],function(exports){
+    exports('api',{
+        login:'/login/IsLogin',
+        getMenu:'/qxgl/getMenu',
+        getAllData:'/jczl/getAllData',
+        getAllDataProc:'/jczl/getAllDataProc',
+        getOneData:'/jczl/getOneData',
+        saveData:'/jczl/saveData',
+        delOneData:'/jczl/delOneData',
+    });
+})

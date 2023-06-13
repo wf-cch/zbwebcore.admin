@@ -1,0 +1,81 @@
+<div class="layui-fluid" lay-title="查询条件查询">
+
+    <div class="layui-card">
+        <div class="layui-card-body nepadmin-table-full">
+            <table id="list-table-cxtjset" lay-filter="list-table-cxtjset"></table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.use(['admin', 'table', 'form'], function (admin, table, form) {
+
+        var url = '/qxgl/getCxtjAll';
+        var tableid = 'list-table-cxtjset';
+        admin.table({
+            elem:tableid,
+            url: url,
+            cols: [[
+                { type: 'radio' },
+                { title: '查询条件ID', field: 'cxtjid', width: 130, sort: true },
+                { title: '查询条件名称', field: 'cxtjmc', width: 150 },
+                { title: '查询条件列名', field: 'cxtjcolumn', width: 120 },
+                //   { title: 'html', field: 'cxtjhtml', width: 300 },
+            ]]
+        });
+        admin.util.event('lay-active-cxtjset', {
+            cx: function () {
+                admin.popup({
+                    url: '/sys/cx', data: { menumc: '查询条件查询' }, yes: function (index, layero) {
+                        var data = form.val("form-group-cx");
+
+                        layer.close(index);
+                        table.reload(tableid, { url: url, where: { cxtj: JSON.stringify(data) } });
+
+                    }
+                });
+            }
+            , edit: function () {
+                var checkStatus = table.checkStatus(tableid);
+                var data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg('请选择一行!');
+                    return;
+                }
+                admin.popup({ url: '/qxgl/cxtjinput', data: { cxtjid: data[0].cxtjid }, area: ['50%', '80%'], offset: 'r', });
+
+            }
+            , del: function () {
+                var checkStatus = table.checkStatus(tableid);
+                var data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg('请选择一行!');
+                    return;
+                }
+                layer.confirm('确定要删除该数据?', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    admin.post({
+                        url: '/qxgl/delCxtj', data: { cxtjid: data[0].cxtjid }, success: function (res) {
+                            if (res.flag) {
+                                layer.msg(res.msg);
+                                table.reload(tableid, { url: url });
+                            } else {
+                                layer.alert(res.msg);
+                            }
+                        }
+                    })
+                }, function () {
+
+                });
+
+            }
+            , add: function () {
+                admin.popup({ url: '/qxgl/cxtjinput', data: {}, area: ['50%', '70%'], offset: 'r', })
+            }
+
+        });
+
+    })
+</script>

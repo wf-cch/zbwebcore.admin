@@ -1,0 +1,1 @@
+layer.msg("我来自myapp.js");
