@@ -1,4 +1,4 @@
-layui.define(function(exports) {
+layui.define(function (exports) {
   exports('conf', {
     //容器ID
     container: 'app',
@@ -81,7 +81,7 @@ layui.define(function(exports) {
         pageName: 'page', //页码的参数名称，默认：page
         limitName: 'limit' //每页数据量的参数名，默认：limit
       }
-   },
+    },
     //第三方扩展
     extend: {
       //后台根据业务需求扩展的方法
@@ -97,12 +97,12 @@ layui.define(function(exports) {
       clipboard: 'lay/extends/clipboard',
       //下拉框
       xmSelect: 'lay/extends/xm-select',
-      excel:'lay/extends/excel.min',
-      base64:'lay/extends/base64',
-      dpdown:'lay/extends/dropdown',
-      loadsh:'lay/extends/loadsh.min',
-      tinymce:'lay/extends/tinymce',
-     
+      excel: 'lay/extends/excel.min',
+      base64: 'lay/extends/base64',
+      dpdown: 'lay/extends/dropdown',
+      loadsh: 'lay/extends/loadsh.min',
+      tinymce: 'lay/extends/tinymce',
+
     }
   })
 })
